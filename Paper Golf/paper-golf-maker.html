@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>⛳ Paper Golf Maker</title>
+<link rel="stylesheet" href="paper-golf-maker.css">
+</head>
+<body>
+<div id="app">
+  <div id="controls">
+    <h1>⛳ Paper Golf Maker</h1>
+    <div id="name-controls">
+      <label>Course Name
+        <input type="text" id="course-name-input" placeholder="Default Course" value="Default Course">
+      </label>
+    </div>
+    <div id="size-controls">
+      <label>Columns
+        <input type="number" id="cols-input" min="1" max="80" value="15">
+      </label>
+      <label>Rows
+        <input type="number" id="rows-input" min="1" max="120" value="25">
+      </label>
+      <button id="resize-btn" type="button">Apply</button>
+    </div>
+    <div id="style-list"></div>
+    <div id="file-controls">
+      <button id="download-btn" type="button">Download</button>
+      <button id="upload-btn" type="button">Upload</button>
+      <input type="file" id="upload-input" accept="application/json,.json" hidden>
+    </div>
+    <button id="clear-all-btn">Clear Course</button>
+  </div>
+  <div id="board-wrap">
+    <div id="board-outer">
+      <div id="board"></div>
+      <div id="app-name">⛳ Dice Golf</div>
+      <div id="course-name"><span id="course-name-display">Default Course</span></div>
+    </div>
+  </div>
+</div>
+
+<script src="paper-golf-maker.js"></script>
+</body>
+</html>

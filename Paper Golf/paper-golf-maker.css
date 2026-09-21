@@ -30,6 +30,7 @@
   --panel-bg: #ffffff;
   --panel-border: #dddddd;
   --app-bg: #e8f7e8;
+  --controls-text: #1a1f2f;
   --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
@@ -59,13 +60,11 @@ body {
   width: max-content;
 }
 
-#app-name {
+#app-name, #course-name {
   position: absolute;
-  bottom: calc(var(--cell-size) / 2);
-  right: calc(var(--cell-size) / 2);
   font-family: var(--font-family);
-  font-size: 14px;
-  color: #555;
+  font-size: 13px;
+  color: #192a3e;
   background: white;
   padding: 6px 10px;
   border-radius: 6px;
@@ -73,12 +72,23 @@ body {
   white-space: nowrap;
 }
 
+
+#app-name {
+  bottom: calc(var(--cell-size) / 3);
+  left: calc(var(--cell-size) / 3);
+}
+
+#course-name {
+  bottom: calc(var(--cell-size) / 3);
+  right: calc(var(--cell-size) / 3);
+}
+
 #controls {
-  width: 250px;
+  width: 20vw;
   flex-shrink: 0;
   background: var(--panel-bg);
   border-right: 1px solid var(--panel-border);
-  padding: 16px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -98,12 +108,36 @@ body {
   border-bottom: 1px solid var(--panel-border);
 }
 
+#name-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+#name-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #555;
+}
+
+#name-controls input {
+  padding: 6px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 13px;
+}
+
 #size-controls label {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 12px;
-  color: #555;
+  color: var(--controls-text);
   gap: 8px;
 }
 
@@ -118,7 +152,7 @@ body {
 #resize-btn {
   margin-top: 4px;
   padding: 6px 10px;
-  border: 1px solid #333;
+  border: 1px solid #008e6d;
   background: #fff;
   color: #222;
   border-radius: 6px;
@@ -134,11 +168,12 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
   padding: 8px 10px;
+  background: white;
   border: 2px solid transparent;
   border-radius: 6px;
-  background: #f7f7f5;
-  color: #222;
+  color: var(--controls-text);
   cursor: pointer;
   font-size: 13px;
   text-align: left;
@@ -149,9 +184,7 @@ body {
 }
 
 .style-btn.active {
-  border-color: #333;
-  background: #fff;
-  font-weight: 600;
+  border-color: #008e6d;
 }
 
 .swatch {
@@ -186,6 +219,30 @@ body {
   font-size: 13px;
   font-weight: 600;
 }
+
+#file-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--panel-border);
+}
+
+#file-controls button {
+  padding: 8px 10px;
+  border: 1px solid #333;
+  background: #fff;
+  color: #222;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+#file-controls button:hover {
+  background: #f0f0f0;
+}
+
 
 #board-wrap {
   flex: 1;
@@ -227,7 +284,18 @@ body {
 .cell.fairway { background: var(--color-fairway-bg); color: var(--color-fairway-fg); }
 .cell.sand    { background: var(--color-sand-bg); color: var(--color-sand-fg); font-size: 45px; }
 .cell.water   { background: var(--color-water-bg);color: var(--color-water-fg); }
+.cell.water:nth-child(12n) { font-size: 0; }
+.cell.water:nth-child(12n)::before { content: "⛵"; font-size: 20px; }
+
 .cell.trees   { background: var(--color-trees-bg);color: var(--color-trees-fg); }
+.cell.trees:nth-child(22n) { font-size: 0; }
+.cell.trees:nth-child(22n)::before { content: "⛺"; font-size: 20px; }
+
+.cell.trees:nth-child(3n) { font-size: 0; }
+.cell.trees:nth-child(3n)::before { content: "🌳"; font-size: 20px; }
+
 .cell.green   { background: var(--color-green-bg);color: var(--color-green-fg); }
 .cell.hole    { background: var(--color-hole-bg); color: var(--color-hole-fg); }
 .cell.start   { background: var(--color-start-bg);color: var(--color-start-fg); }
+
+
