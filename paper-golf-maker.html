@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Golf Course Grid Designer</title>
+<link rel="stylesheet" href="paper-golf-maker.css">
+</head>
+<body>
+<div id="app">
+  <div id="controls">
+    <h1>Golf Grid Designer</h1>
+    <div id="size-controls">
+      <label>Columns
+        <input type="number" id="cols-input" min="1" max="80" value="15">
+      </label>
+      <label>Rows
+        <input type="number" id="rows-input" min="1" max="120" value="25">
+      </label>
+      <button id="resize-btn" type="button">Apply Size</button>
+    </div>
+    <div id="style-list"></div>
+    <button id="clear-all-btn">Clear Entire Grid</button>
+  </div>
+  <div id="board-wrap">
+    <div id="board-outer">
+      <div id="board"></div>
+      <div id="app-name">⛳ Paper Golf</div>
+    </div>
+  </div>
+</div>
+
+<script src="paper-golf-maker.js"></script>
+</body>
+</html>

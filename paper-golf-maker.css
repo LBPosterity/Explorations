@@ -1,0 +1,233 @@
+:root {
+  --cell-size: 32px;
+  --grid-gap: 1px;
+
+  --color-clear-bg: #3a7a67;
+  --color-clear-fg: #204d2a;
+
+  --color-fairway-bg: #6abc8f;
+  --color-fairway-fg: rgba(30, 51, 18, 0.157);
+
+  --color-sand-bg: #e8d18a;
+  --color-sand-fg: #d8b65a;
+
+  --color-water-bg: #00badb;
+  --color-water-fg: #0793ac;
+
+  --color-trees-bg: #2d5f4e;
+  --color-trees-fg: #30ceac;
+
+  --color-green-bg: #b6e39a;
+  --color-green-fg: #5a9c3a;
+
+  --color-hole-bg: var(--color-green-bg);
+  --color-hole-fg: #af001d;
+
+  --color-start-bg: var(--color-fairway-bg);
+  --color-start-fg: #ffffff;
+
+  --border-color: rgba(22, 30, 46, 0.1);
+  --panel-bg: #ffffff;
+  --panel-border: #dddddd;
+  --app-bg: #e8f7e8;
+  --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+button {
+  font-family: inherit;
+  color: #222;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background: var(--app-bg);
+  color: #222;
+  display: flex;
+  min-height: 100vh;
+}
+
+#app {
+  display: flex;
+  width: 100%;
+}
+
+#board-outer {
+  position: relative;
+  width: max-content;
+}
+
+#app-name {
+  position: absolute;
+  bottom: calc(var(--cell-size) / 2);
+  right: calc(var(--cell-size) / 2);
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: #555;
+  background: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+#controls {
+  width: 250px;
+  flex-shrink: 0;
+  background: var(--panel-bg);
+  border-right: 1px solid var(--panel-border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#controls h1 {
+  font-size: 16px;
+  margin: 0 0 8px 0;
+}
+
+#size-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+#size-controls label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #555;
+  gap: 8px;
+}
+
+#size-controls input {
+  width: 60px;
+  padding: 4px 6px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+#resize-btn {
+  margin-top: 4px;
+  padding: 6px 10px;
+  border: 1px solid #333;
+  background: #fff;
+  color: #222;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+#resize-btn:hover {
+  background: #f0f0f0;
+}
+
+.style-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background: #f7f7f5;
+  color: #222;
+  cursor: pointer;
+  font-size: 13px;
+  text-align: left;
+}
+
+.style-btn:hover {
+  background: #eeeeee;
+}
+
+.style-btn.active {
+  border-color: #333;
+  background: #fff;
+  font-weight: 600;
+}
+
+.swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.swatch.clear   { background: var(--color-clear-bg);   color: var(--color-clear-fg); }
+.swatch.fairway { background: var(--color-fairway-bg); color: var(--color-fairway-fg); }
+.swatch.sand    { background: var(--color-sand-bg);    color: var(--color-sand-fg); }
+.swatch.water   { background: var(--color-water-bg);   color: var(--color-water-fg); }
+.swatch.trees   { background: var(--color-trees-bg);   color: var(--color-trees-fg); }
+.swatch.green   { background: var(--color-green-bg);   color: var(--color-green-fg); }
+.swatch.hole    { background: var(--color-hole-bg);    color: var(--color-hole-fg); }
+.swatch.start   { background: var(--color-start-bg);   color: var(--color-start-fg); }
+
+#clear-all-btn {
+  margin-top: 16px;
+  padding: 10px;
+  border: 1px solid #c0392b;
+  color: #c0392b;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+#board-wrap {
+  flex: 1;
+  overflow: auto;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols, 20), var(--cell-size));
+  grid-auto-rows: var(--cell-size);
+  background: var(--border-color);
+  border: 1px solid var(--border-color);
+  width: max-content;
+  border-radius: 8px;
+  overflow: hidden;
+  
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background: var(--color-clear-bg);
+  color: var(--color-clear-fg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  user-select: none;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  line-height: 1;
+}
+
+.cell.fairway { background: var(--color-fairway-bg); color: var(--color-fairway-fg); }
+.cell.sand    { background: var(--color-sand-bg); color: var(--color-sand-fg); font-size: 45px; }
+.cell.water   { background: var(--color-water-bg);color: var(--color-water-fg); }
+.cell.trees   { background: var(--color-trees-bg);color: var(--color-trees-fg); }
+.cell.green   { background: var(--color-green-bg);color: var(--color-green-fg); }
+.cell.hole    { background: var(--color-hole-bg); color: var(--color-hole-fg); }
+.cell.start   { background: var(--color-start-bg);color: var(--color-start-fg); }
