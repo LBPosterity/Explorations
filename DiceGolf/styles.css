@@ -60,6 +60,13 @@ body {
   width: max-content;
 }
 
+@media (max-width: 1300px) {
+  #board-outer {
+    transform: scale(0.7);
+    transform-origin: top;
+  }
+}
+
 #app-name, #course-name {
   position: absolute;
   font-family: var(--font-family);
@@ -85,6 +92,7 @@ body {
 
 #controls {
   width: 20vw;
+  min-width: 250px;
   flex-shrink: 0;
   background: var(--panel-bg);
   border-right: 1px solid var(--panel-border);
