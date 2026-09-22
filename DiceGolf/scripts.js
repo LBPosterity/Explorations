@@ -151,7 +151,16 @@ const downloadBtn = document.getElementById("download-btn");
 const uploadBtn = document.getElementById("upload-btn");
 const uploadInput = document.getElementById("upload-input");
 
+let downloadCooldown = false;
 downloadBtn.addEventListener("click", () => {
+  if (downloadCooldown) return;
+  downloadCooldown = true;
+  downloadBtn.disabled = true;
+  setTimeout(() => {
+    downloadCooldown = false;
+    downloadBtn.disabled = false;
+  }, 2000);
+
   const data = {
     version: 1,
     name: courseNameInput.value || "Default Course",
