@@ -11,7 +11,7 @@
     <h1>⛳ Dice Golf Maker</h1>
     <div id="name-controls">
       <label>Course Name
-        <input type="text" id="course-name-input" placeholder="Default Course" value="Default Course">
+        <input type="text" id="course-name-input" placeholder="Roll A 6 Hills" value="Roll A 6 Hills">
       </label>
     </div>
     <div id="size-controls">
@@ -28,6 +28,9 @@
       <button id="download-btn" type="button">Download</button>
       <button id="upload-btn" type="button">Upload</button>
       <input type="file" id="upload-input" accept="application/json,.json" hidden>
+      <label id="course-select-label">Load Course
+        <select id="course-select"></select>
+      </label>
     </div>
     <button id="clear-all-btn">Clear Course</button>
   </div>
@@ -35,7 +38,7 @@
     <div id="board-outer">
       <div id="board"></div>
       <div id="app-name">⛳ Dice Golf</div>
-      <div id="course-name"><span id="course-name-display">Default Course</span></div>
+      <div id="course-name"><span id="course-name-display">Roll A 6 Hills</span></div>
     </div>
   </div>
 </div>

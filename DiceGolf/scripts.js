@@ -56,7 +56,7 @@ const courseNameInput = document.getElementById("course-name-input");
 const courseNameDisplay = document.getElementById("course-name-display");
 
 courseNameInput.addEventListener("input", () => {
-  courseNameDisplay.textContent = courseNameInput.value || "Default Course";
+  courseNameDisplay.textContent = courseNameInput.value || "Roll A 6 Hills";
 });
 
 function renderControls() {
@@ -163,7 +163,7 @@ downloadBtn.addEventListener("click", () => {
 
   const data = {
     version: 1,
-    name: courseNameInput.value || "Default Course",
+    name: courseNameInput.value || "Roll A 6 Hills",
     cols: COLS,
     rows: ROWS,
     design: getDesignFromBoard(),
@@ -209,7 +209,7 @@ function loadDesign(data) {
   rowsInput.value = ROWS;
   colsInput.value = COLS;
 
-  const name = data.name || "Default Course";
+  const name = data.name || "Roll A 6 Hills";
   courseNameInput.value = name;
   courseNameDisplay.textContent = name;
 
@@ -218,3 +218,98 @@ function loadDesign(data) {
 
 renderControls();
 renderBoard();
+
+// Course files are discovered at runtime from the Courses folder so newly
+// added files show up automatically. COURSE_FILES holds the discovered list.
+let COURSE_FILES = [];
+
+const courseSelect = document.getElementById("course-select");
+
+function renderCourseSelect() {
+  courseSelect.innerHTML = "";
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = COURSE_FILES.length ? "Select a course…" : "No courses found";
+  courseSelect.appendChild(placeholder);
+  COURSE_FILES.forEach(course => {
+    const opt = document.createElement("option");
+    opt.value = course.file;
+    opt.textContent = course.label;
+    courseSelect.appendChild(opt);
+  });
+}
+
+// Pull the list of .json files from the Courses directory listing that dev
+// servers (Python http.server, VS Code Live Server, etc.) return as HTML.
+async function listCourseFilesFromDirectory() {
+  const res = await fetch("Courses/");
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const html = await res.text();
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const files = [];
+  doc.querySelectorAll("a[href]").forEach(a => {
+    const href = a.getAttribute("href").split("/").pop().split("?")[0];
+    const name = decodeURIComponent(href);
+    if (name.toLowerCase().endsWith(".json") && !files.includes(name)) {
+      files.push(name);
+    }
+  });
+  return files;
+}
+
+// Fall back to a manifest file listing course filenames if directory
+// listing is not available on the server.
+async function listCourseFilesFromManifest() {
+  const res = await fetch("Courses/manifest.json");
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const data = await res.json();
+  if (!Array.isArray(data)) throw new Error("invalid manifest");
+  return data.filter(name => typeof name === "string" && name.toLowerCase().endsWith(".json"));
+}
+
+async function labelForCourse(file) {
+  try {
+    const res = await fetch("Courses/" + file);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.name) return data.name;
+    }
+  } catch (_) { /* fall back to filename */ }
+  return file.replace(/\.json$/i, "");
+}
+
+async function refreshCourseList() {
+  let files = [];
+  try {
+    files = await listCourseFilesFromDirectory();
+  } catch (_) {
+    try {
+      files = await listCourseFilesFromManifest();
+    } catch (_) {
+      files = [];
+    }
+  }
+  COURSE_FILES = await Promise.all(
+    files.map(async file => ({ file, label: await labelForCourse(file) }))
+  );
+  COURSE_FILES.sort((a, b) => a.label.localeCompare(b.label));
+  renderCourseSelect();
+}
+
+courseSelect.addEventListener("change", async () => {
+  const file = courseSelect.value;
+  if (!file) return;
+  try {
+    const res = await fetch("Courses/" + file);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    loadDesign(await res.json());
+  } catch (err) {
+    alert("Could not load course: " + err.message);
+  }
+});
+
+// Re-scan the folder whenever the dropdown is opened so new files appear.
+courseSelect.addEventListener("mousedown", () => { refreshCourseList(); });
+
+renderCourseSelect();
+refreshCourseList();
