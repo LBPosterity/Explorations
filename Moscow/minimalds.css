@@ -17,7 +17,7 @@
   --size-base: 0.5rem; /* Sizing scale base */
 
   --type-base: 1rem; /* base text size */
-  --type-ratio: 0.4rem; /* ratio - heading to base */
+  --type-ratio: 0.2rem; /* ratio - heading to base */
   --line-height-base: 1.6; 
   
   --family-body: 'Lato', sans-serif;
@@ -58,8 +58,8 @@
   --text-muted: var(--grey-600);
   --text-light: var(--grey-600);
 
-  --border-color: var(--grey-200);
-  --border-light: var(--grey-100);
+  --border-color: var(--grey-op30);
+  --border-light: var(--grey-op20);
 
   --link-color: var(--blue-600);
   --link-color-hover: var(--blue-700);
@@ -72,8 +72,8 @@
   --secondary-hover: var(--blue-600);
   --secondary-contrast: var(--white);
 
-  --tertiary: var(--grey-100);
-  --tertiary-hover: var(--grey-150);
+  --tertiary: var(--grey-op10);
+  --tertiary-hover: var(--grey-op20);
   --tertiary-contrast: var(--grey-800);
 
   --success: var(--primary);
