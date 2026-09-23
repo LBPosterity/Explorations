@@ -704,7 +704,7 @@ select:focus,
 textarea:focus
 {
   outline: 2px solid var(--blue-500);
-  outline-offset: 2px;
+  outline-offset: 0px;
   border-color: var(--blue-500);
 }
 
