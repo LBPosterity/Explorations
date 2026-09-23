@@ -108,7 +108,7 @@ html, body {
 .filter-chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--size-1);
+  gap: var(--size-0-5);
   border: 1px solid var(--chip-color);
   border-radius: var(--radius-rounded);
   background: transparent;
@@ -213,12 +213,12 @@ main {
   font-family: var(--family-heading);
   font-weight: var(--heading-weight);
   color: var(--heading-color);
+  border: none;
   font-size: calc(var(--type-base) + var(--type-ratio) * 0.85);
 }
 
 .level-cell {
-  background: var(--white);
-  border-top: 3px solid var(--row-color);
+  background: var(--row-bg);
   display: flex;
   flex-direction: column;
   padding: 0;
