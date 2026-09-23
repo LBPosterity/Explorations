@@ -1,0 +1,69 @@
+{
+  "type": "moscow-diagram",
+  "schema": 2,
+  "versionNumber": "1.0",
+  "versionName": "",
+  "exportedAt": "2026-09-13T23:16:46.990Z",
+  "sections": [
+    {
+      "id": "8gjyoloumu0etdf5",
+      "name": "Onboarding",
+      "items": {
+        "must": [
+          {
+            "id": "ni62q2vvmu0etncr",
+            "title": "dfgdfg",
+            "desc": "dfgdfgdfg"
+          }
+        ],
+        "should": [],
+        "could": [
+          {
+            "id": "1ap2fs7nmu0etxit",
+            "title": "dfgdfgdfg dfgdfg",
+            "desc": "dfgdfg dfgdfg  dfgdf dfgdfgdfg"
+          }
+        ],
+        "wont": []
+      }
+    },
+    {
+      "id": "eso15g51mu0etdf5",
+      "name": "Configuration",
+      "items": {
+        "must": [],
+        "should": [
+          {
+            "id": "94mguad6mu0etpln",
+            "title": "dfgdfgdg",
+            "desc": "dfgd dfgdfg dfgdfg"
+          }
+        ],
+        "could": [],
+        "wont": [
+          {
+            "id": "m43dffdamu0eu1rb",
+            "title": "dfgdfg dfgdfg dfgdfgdfg rge gdr rg",
+            "desc": "dfgdgd dg dvgdrg drgdr"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qsb3f8kamu0etdf5",
+      "name": "Publishing",
+      "items": {
+        "must": [],
+        "should": [],
+        "could": [
+          {
+            "id": "tc0exaramu0ettcx",
+            "title": "dcfgdfgdf",
+            "desc": "dfgdfgdfg dfgdfg dfgdfg"
+          }
+        ],
+        "wont": []
+      }
+    }
+  ]
+}

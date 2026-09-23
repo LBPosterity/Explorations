@@ -1,1 +1,556 @@
-code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoSCoW Diagram Maker</title>
+
+<style>
+
+@import url("styles.css");
+@import url("minimalds.css");
+
+</style>
+
+</head>
+<body>
+
+<header class="app-header">
+  <div>
+    <div class="title-row">
+      <h4>MoSCoW Diagram</h4>
+      <div class="version-tag radius-sm">
+        <span class="v-prefix">v</span>
+        <input type="text" class="v-number" id="version-number" placeholder="1.0" title="Version number">
+        <div class="v-sep"></div>
+        <input type="text" class="v-name" id="version-name" placeholder="Version name" title="Version name">
+      </div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <input type="file" id="file-input" accept="application/json">
+    <span class="import-status" id="import-status"></span>
+    <button class="btn-tertiary -sm radius-sm" id="import-btn" type="button">Import JSON</button>
+    <button class="btn-primary -sm radius-sm" id="export-btn" type="button">Export JSON</button>
+  </div>
+</header>
+
+<fieldset class="filter-bar" id="filter-bar">
+  <legend>Show</legend>
+</fieldset>
+
+<main>
+  <div class="board-grid" id="board-grid"></div>
+</main>
+
+
+<script>
+(function () {
+  "use strict";
+
+  const LEVELS = [
+    { key: "must",   label: "Must have",   def: "Non-negotiable" },
+    { key: "should", label: "Should have", def: "Important, not vital" },
+    { key: "could",  label: "Could have",  def: "Nice to have" },
+    { key: "wont",   label: "Won\u2019t have", def: "Out of scope for now" }
+  ];
+
+  function emptyItems() {
+    return { must: [], should: [], could: [], wont: [] };
+  }
+
+  function uid() {
+    return Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+  }
+
+  /** @type {Array<{id:string, name:string, items: {must:[],should:[],could:[],wont:[]}}>} */
+  let sections = [
+    { id: uid(), name: "Onboarding",    items: emptyItems() },
+    { id: uid(), name: "Configuration", items: emptyItems() },
+    { id: uid(), name: "Publishing",    items: emptyItems() }
+  ];
+
+  let versionNumber = "1.0";
+  let versionName = "";
+  let editingId = null;
+  let focusSectionId = null;
+  let pendingDeleteSectionId = null;
+  let visibleLevelKeys = new Set(LEVELS.map(l => l.key));
+  let readOnly = false;
+  let showDescriptions = true;
+
+  function el(tag, attrs, children) {
+    const node = document.createElement(tag);
+    if (attrs) {
+      for (const k in attrs) {
+        if (k === "class") node.className = attrs[k];
+        else if (k === "text") node.textContent = attrs[k];
+        else node.setAttribute(k, attrs[k]);
+      }
+    }
+    (children || []).forEach(c => c && node.appendChild(c));
+    return node;
+  }
+
+  function renderFilterBar() {
+    const bar = document.getElementById("filter-bar");
+    bar.innerHTML = "";
+
+
+    LEVELS.forEach(level => {
+      const active = visibleLevelKeys.has(level.key);
+      const chip = el("button", {
+        type: "button",
+        class: (active ? "filter-chip active" : "filter-chip") + " level-" + level.key
+      }, [
+        el("span", { class: "dot" }),
+        el("span", { text: level.label })
+      ]);
+      chip.addEventListener("click", () => {
+        if (active) {
+          if (visibleLevelKeys.size > 1) visibleLevelKeys.delete(level.key);
+        } else {
+          visibleLevelKeys.add(level.key);
+        }
+        renderFilterBar();
+        render();
+      });
+      bar.appendChild(chip);
+    });
+
+    bar.appendChild(el("span", { class: "filter-divider" }));
+
+    const readOnlyChip = el("button", {
+      type: "button",
+      class: readOnly ? "filter-chip active" : "filter-chip"
+    }, [
+      el("span", { class: "dot" }),
+      el("span", { text: "Read-only" })
+    ]);
+    readOnlyChip.style.setProperty("--chip-color", "var(--text-muted)");
+    readOnlyChip.style.setProperty("--chip-bg", "var(--grey-op10)");
+    readOnlyChip.addEventListener("click", () => {
+      readOnly = !readOnly;
+      renderFilterBar();
+      render();
+    });
+    bar.appendChild(readOnlyChip);
+
+    const descChip = el("button", {
+      type: "button",
+      class: showDescriptions ? "filter-chip active" : "filter-chip"
+    }, [
+      el("span", { class: "dot" }),
+      el("span", { text: "Descriptions" })
+    ]);
+    descChip.style.setProperty("--chip-color", "var(--text-muted)");
+    descChip.style.setProperty("--chip-bg", "var(--grey-op10)");
+    descChip.addEventListener("click", () => {
+      showDescriptions = !showDescriptions;
+      renderFilterBar();
+      render();
+    });
+    bar.appendChild(descChip);
+  }
+
+  function initVersionControls() {
+    const numberInput = document.getElementById("version-number");
+    const nameInput = document.getElementById("version-name");
+    numberInput.value = versionNumber;
+    nameInput.value = versionName;
+
+    numberInput.addEventListener("change", () => {
+      versionNumber = numberInput.value.trim();
+    });
+    nameInput.addEventListener("change", () => {
+      versionName = nameInput.value.trim();
+    });
+    [numberInput, nameInput].forEach(input => {
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") input.blur();
+      });
+    });
+  }
+
+  function syncVersionControls() {
+    document.getElementById("version-number").value = versionNumber;
+    document.getElementById("version-name").value = versionName;
+  }
+
+  function render() {
+    const grid = document.getElementById("board-grid");
+    grid.innerHTML = "";
+
+    const visibleLevels = LEVELS.filter(l => visibleLevelKeys.has(l.key));
+
+    // grid columns: sticky label column, one per phase, add-phase column
+    grid.style.gridTemplateColumns =
+      `max-content repeat(${sections.length}, minmax(var(--size-30), 1fr)) max-content`;
+
+    // ---- header row: corner cell, one cell per phase, add-phase cell ----
+    grid.appendChild(el("div", { class: "corner-cell", text: "Priority \u2193  /  Phase \u2192" }));
+
+    sections.forEach(section => {
+      const nameInput = el("input", { type: "text" });
+      nameInput.value = section.name;
+      nameInput.addEventListener("change", () => {
+        section.name = nameInput.value.trim() || section.name;
+        nameInput.value = section.name;
+      });
+      nameInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") nameInput.blur();
+      });
+
+      const isPendingDelete = pendingDeleteSectionId === section.id;
+      const headerChildren = [nameInput];
+      if (!readOnly) {
+        const delSectionBtn = el("button", {
+          type: "button",
+          class: isPendingDelete ? "btn-clear icon-only-sm -round confirm-delete" : "btn-clear icon-only-sm -round",
+          title: isPendingDelete ? "Click again to confirm" : "Delete section",
+          "aria-label": "Delete section"
+        });
+        delSectionBtn.textContent = isPendingDelete ? "Sure?" : "\u2715";
+        delSectionBtn.addEventListener("click", () => {
+          const hasItems = LEVELS.some(l => section.items[l.key].length > 0);
+          if (hasItems && pendingDeleteSectionId !== section.id) {
+            pendingDeleteSectionId = section.id;
+            render();
+            return;
+          }
+          pendingDeleteSectionId = null;
+          sections = sections.filter(s => s.id !== section.id);
+          render();
+        });
+        headerChildren.push(delSectionBtn);
+      }
+
+      const header = el("div", { class: "col-header" }, [
+        el("div", { class: "col-header-row" }, headerChildren)
+      ]);
+      grid.appendChild(header);
+
+      if (section.id === focusSectionId) {
+        requestAnimationFrame(() => {
+          nameInput.focus();
+          nameInput.select();
+        });
+        focusSectionId = null;
+      }
+    });
+
+    if (!readOnly) {
+      const addSectionBtn = el("button", {
+        type: "button",
+        class: "btn-clear icon-only-sm -round radius-sm",
+        title: "Add phase / section",
+        "aria-label": "Add phase / section",
+        text: "+"
+      });
+      addSectionBtn.addEventListener("click", () => {
+        const newSection = { id: uid(), name: "New phase", items: emptyItems() };
+        sections.push(newSection);
+        focusSectionId = newSection.id;
+        render();
+      });
+      grid.appendChild(el("div", { class: "add-phase-cell" }, [addSectionBtn]));
+    } else {
+      grid.appendChild(el("div", { class: "add-phase-cell" }));
+    }
+
+    // ---- one grid row per visible MoSCoW level ----
+    visibleLevels.forEach(level => {
+      const rowLabel = el("div", { class: "row-label level-" + level.key }, [
+        el("h6", { text: level.label }),
+        el("p", { class: "small", text: level.def })
+      ]);
+      grid.appendChild(rowLabel);
+
+      sections.forEach(section => {
+        grid.appendChild(renderLevelCell(section, level));
+      });
+
+      grid.appendChild(el("div", { class: "add-phase-spacer" })); // under the add-phase column
+    });
+  }
+
+  function renderLevelCell(section, level) {
+    const items = section.items[level.key];
+
+    const count = el("span", { class: "cell-count", text: String(items.length) });
+
+    const cellHeadChildren = [count];
+    if (!readOnly) {
+      const addBtn = el("button", {
+        type: "button",
+        class: "btn-clear icon-only-sm -round",
+        title: "Add item",
+        "aria-label": "Add item"
+      });
+      addBtn.textContent = "+";
+      addBtn.addEventListener("click", () => {
+        const newItem = { id: uid(), title: "", desc: "", explanation: "" };
+        section.items[level.key].push(newItem);
+        editingId = newItem.id;
+        render();
+      });
+      cellHeadChildren.push(addBtn);
+    }
+
+    const cellHead = el("div", { class: "cell-head" }, cellHeadChildren);
+
+    const list = el("ul", { class: "items" });
+    if (items.length === 0) {
+      list.appendChild(el("li", { class: "empty-hint", text: "No items" }));
+    }
+    items.forEach(item => {
+      list.appendChild(renderItem(section, level.key, item));
+    });
+
+    const cell = el("div", { class: "level-cell level-" + level.key }, [cellHead, list]);
+    return cell;
+  }
+
+  // Modal for the item's optional long-form explanation. Editable when the
+  // item is being edited, read-only when just viewing.
+  function openExplanationDialog(options) {
+    const editable = !!options.editable;
+    const heading = el("h6", { text: editable ? "Edit explanation" : "Explanation" });
+    const subtitle = options.title ? el("p", { class: "small explanation-dialog-subtitle", text: options.title }) : null;
+
+    let contentNode;
+    if (editable) {
+      contentNode = el("textarea", { class: "explanation-textarea", placeholder: "Add a longer explanation\u2026" });
+      contentNode.value = options.value || "";
+    } else {
+      contentNode = el("div", { class: "explanation-readonly" });
+      contentNode.textContent = options.value || "No explanation provided.";
+    }
+
+    const dlg = el("dialog", { class: "explanation-dialog radius-sm" });
+    const actionBtns = [];
+    if (editable) {
+      const saveBtn = el("button", { type: "button", class: "btn-primary -sm radius-sm", text: "Save" });
+      saveBtn.addEventListener("click", () => {
+        if (options.onSave) options.onSave(contentNode.value);
+        dlg.close();
+      });
+      actionBtns.push(saveBtn);
+    }
+    const closeBtn = el("button", { type: "button", class: "btn-tertiary -sm radius-sm", text: editable ? "Cancel" : "Close" });
+    closeBtn.addEventListener("click", () => dlg.close());
+    actionBtns.push(closeBtn);
+
+    dlg.appendChild(el("div", { class: "explanation-dialog-body" }, [
+      heading,
+      subtitle,
+      contentNode,
+      el("div", { class: "explanation-dialog-actions" }, actionBtns)
+    ].filter(Boolean)));
+    dlg.addEventListener("close", () => dlg.remove());
+    document.body.appendChild(dlg);
+    dlg.showModal();
+    if (editable) requestAnimationFrame(() => contentNode.focus());
+  }
+
+  function renderItem(section, levelKey, item) {
+    const isEditing = item.id === editingId;
+    let pendingExplanation = item.explanation || "";
+
+    const controlsBtns = [];
+
+    if (item.explanation) {
+      const viewExplBtn = el("button", { type: "button", class: "btn-clear icon-only-sm -round", title: "View explanation", "aria-label": "View explanation" });
+      viewExplBtn.textContent = "\u24D8";
+      viewExplBtn.addEventListener("click", () => {
+        openExplanationDialog({ title: item.title, value: item.explanation, editable: false });
+      });
+      controlsBtns.push(viewExplBtn);
+    }
+
+    const editBtn = el("button", { type: "button", class: "btn-clear icon-only-sm -round", title: "Edit", "aria-label": "Edit item" });
+    editBtn.textContent = "\u270E";
+    editBtn.addEventListener("click", () => {
+      editingId = item.id;
+      render();
+    });
+    if (!readOnly) controlsBtns.push(editBtn);
+
+    const controls = el("div", { class: "item-controls" }, controlsBtns);
+
+    const titleEl = el("h6", { text: item.title });
+    const descEl = (showDescriptions && item.desc) ? el("p", { class: "small item-desc-text", text: item.desc }) : null;
+
+    const itemNode = el("li", { class: isEditing ? "item editing" : "item" }, [controls, titleEl, descEl].filter(Boolean));
+
+    const titleInput = el("input", { type: "text", placeholder: "Item title" });
+    titleInput.value = item.title;
+    const descInput = el("textarea", { placeholder: "Short description (optional)" });
+    descInput.value = item.desc || "";
+
+    const saveBtn = el("button", { type: "button", class: "btn-primary -sm radius-sm", text: "Save" });
+    const cancelBtn = el("button", { type: "button", class: "btn-tertiary -sm radius-sm", text: "Cancel" });
+    const editRowBtns = [saveBtn, cancelBtn];
+
+    if (!readOnly) {
+      const deleteBtn = el("button", { type: "button", class: "btn-clear icon-only-sm -round confirm-delete", title: "Delete", "aria-label": "Delete item" });
+      deleteBtn.textContent = "\u2715";
+      deleteBtn.addEventListener("click", () => {
+        section.items[levelKey] = section.items[levelKey].filter(i => i.id !== item.id);
+        editingId = null;
+        render();
+      });
+      editRowBtns.push(deleteBtn);
+    }
+
+    function save() {
+      const newTitle = titleInput.value.trim();
+      if (!newTitle) { titleInput.focus(); return; }
+      item.title = newTitle;
+      item.desc = descInput.value.trim();
+      item.explanation = pendingExplanation.trim();
+      editingId = null;
+      render();
+    }
+
+    saveBtn.addEventListener("click", save);
+    titleInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") { e.preventDefault(); save(); }
+    });
+    descInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); save(); }
+    });
+
+    cancelBtn.addEventListener("click", () => {
+      editingId = null;
+      if (!item.title.trim()) {
+        section.items[levelKey] = section.items[levelKey].filter(i => i.id !== item.id);
+      }
+      render();
+    });
+
+    const explBtn = el("button", { type: "button", class: "btn-tertiary -sm radius-sm explanation-edit-btn" });
+    function updateExplBtnLabel() {
+      explBtn.textContent = pendingExplanation.trim() ? "Edit explanation" : "Add explanation";
+    }
+    updateExplBtnLabel();
+    explBtn.addEventListener("click", () => {
+      openExplanationDialog({
+        title: titleInput.value.trim(),
+        value: pendingExplanation,
+        editable: true,
+        onSave: (val) => { pendingExplanation = val; updateExplBtnLabel(); }
+      });
+    });
+
+    const editFields = el("div", { class: "edit-fields" }, [
+      titleInput,
+      descInput,
+      explBtn,
+      el("div", { class: "edit-row-btns" }, editRowBtns)
+    ]);
+
+    itemNode.appendChild(editFields);
+
+    if (isEditing) {
+      requestAnimationFrame(() => {
+        titleInput.focus();
+        titleInput.select();
+      });
+    }
+
+    return itemNode;
+  }
+
+  function exportJSON() {
+    const payload = {
+      type: "moscow-diagram",
+      schema: 2,
+      versionNumber,
+      versionName,
+      exportedAt: new Date().toISOString(),
+      sections
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const stamp = new Date().toISOString().slice(0, 10);
+    const vPart = versionNumber ? `-v${versionNumber.replace(/[^a-zA-Z0-9._-]/g, "")}` : "";
+    a.href = url;
+    a.download = `moscow-diagram${vPart}-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function sanitizeItems(raw) {
+    const out = emptyItems();
+    LEVELS.forEach(level => {
+      const list = Array.isArray(raw && raw[level.key]) ? raw[level.key] : [];
+      out[level.key] = list.map(i => ({
+        id: i.id || uid(),
+        title: String(i.title || "").slice(0, 500),
+        desc: String(i.desc || "").slice(0, 2000),
+        explanation: String(i.explanation || "").slice(0, 5000)
+      })).filter(i => i.title);
+    });
+    return out;
+  }
+
+  function showImportStatus(message) {
+    const status = document.getElementById("import-status");
+    status.textContent = message;
+    clearTimeout(showImportStatus._t);
+    showImportStatus._t = setTimeout(() => { status.textContent = ""; }, 4000);
+  }
+
+  function importJSON(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+
+        if (Array.isArray(parsed.sections)) {
+          sections = parsed.sections.map(s => ({
+            id: s.id || uid(),
+            name: String(s.name || "Untitled").slice(0, 200),
+            items: sanitizeItems(s.items)
+          }));
+          if (sections.length === 0) sections = [{ id: uid(), name: "Untitled", items: emptyItems() }];
+        } else if (parsed.data) {
+          sections = [{ id: uid(), name: "Imported", items: sanitizeItems(parsed.data) }];
+        } else {
+          throw new Error("Unrecognized format");
+        }
+
+        versionNumber = typeof parsed.versionNumber === "string" ? parsed.versionNumber.slice(0, 30) : "1.0";
+        versionName = typeof parsed.versionName === "string" ? parsed.versionName.slice(0, 100) : "";
+        syncVersionControls();
+
+        render();
+      } catch (err) {
+        showImportStatus("Could not read that file as a MoSCoW diagram export.");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  document.getElementById("export-btn").addEventListener("click", exportJSON);
+
+  const fileInput = document.getElementById("file-input");
+  document.getElementById("import-btn").addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) importJSON(file);
+    fileInput.value = "";
+  });
+
+  initVersionControls();
+  renderFilterBar();
+  render();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,744 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;900&display=swap');
+
+*
+{
+  box-sizing: border-box;
+  margin: 0;
+  margin-block: 0;
+  margin-inline: 0;
+}
+
+:root
+{
+  
+  /*-- Master variables -------*/
+  
+  --size-base: 0.5rem; /* Sizing scale base */
+
+  --type-base: 1rem; /* base text size */
+  --type-ratio: 0.4rem; /* ratio - heading to base */
+  --line-height-base: 1.6; 
+  
+  --family-body: 'Lato', sans-serif;
+  --body-weight: normal;
+  --family-heading: 'Lato', sans-serif;
+  --heading-weight: 900;
+  
+  --radius-base: var(--size-1);
+
+  --input-base: var(--size-5);
+  
+  --transition-speed: 0.3s;
+    
+  --transition: var(--transition-speed) all ease; 
+  --transition-slow: calc(var(--transition-speed) *2) all ease;
+  --transition-slowest: calc(var(--transition-speed) *2) all ease;
+  
+
+  
+  --grey-h: 200deg; --grey-s: 12%; --grey-l: 50%;
+  --green-h: 170deg; --green-s: 75%; --green-l: 40%;
+  --blue-h: 195deg; --blue-s: 75%; --blue-l: 40%;
+  --red-h: 350deg; --red-s: 50%; --red-l: 50%;
+  --yellow-h: 60deg; --yellow-s: 50%; --yellow-l: 50%;
+  --orange-h: 18deg; --orange-s: 70%; --orange-l: 60%;
+  --purple-h: 260deg; --purple-s: 50%; --purple-l: 50%;
+  
+
+  
+  /*-- Semantic colours ---------------------*/
+
+  --white: #ffffff;
+  --black: var(--grey-900);
+
+  --heading-color: var(--blue-900);
+  --body-color: var(--grey-800);
+  --text-color: var(--grey-800);
+  --text-muted: var(--grey-600);
+  --text-light: var(--grey-600);
+
+  --border-color: var(--grey-200);
+  --border-light: var(--grey-100);
+
+  --link-color: var(--blue-600);
+  --link-color-hover: var(--blue-700);
+
+  --primary: var(--green-500);
+  --primary-hover: var(--green-600);
+  --primary-contrast: var(--white);
+
+  --secondary: var(--blue-500);
+  --secondary-hover: var(--blue-600);
+  --secondary-contrast: var(--white);
+
+  --tertiary: var(--grey-100);
+  --tertiary-hover: var(--grey-150);
+  --tertiary-contrast: var(--grey-800);
+
+  --success: var(--primary);
+  --warning: var(--orange-500);
+  --error: var(--red-500);
+
+  --disabled: var(--grey-200);
+  --disabled-text: var(--grey-500);
+
+
+  /*-- Colours ---------------------*/
+  
+  --grey-50: hsl(var(--grey-h) calc(var(--grey-s)*1.5) calc(var(--grey-l)*1.925));
+  --grey-100: hsl(var(--grey-h) calc(var(--grey-s)*1.5) calc(var(--grey-l)*1.85));
+  --grey-150: hsl(var(--grey-h) calc(var(--grey-s)*1.5) calc(var(--grey-l)*1.75));
+  --grey-200: hsl(var(--grey-h) calc(var(--grey-s)*1.5) calc(var(--grey-l)*1.65));
+  --grey-250: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*1.5));  
+  --grey-300: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*1.4));
+  --grey-350: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*1.3));  
+  --grey-400: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*1.2));
+  --grey-450: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*1.15));  
+  --grey-500: hsl(var(--grey-h) var(--grey-s) var(--grey-l));
+  --grey-550: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*0.9));  
+  --grey-600: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*0.8));
+  --grey-650: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*0.7));  
+  --grey-700: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*0.6));
+  --grey-750: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*0.5));  
+  --grey-800: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*0.4));
+  --grey-850: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*0.3));  
+  --grey-900: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*0.2));
+  --grey-950: hsl(var(--grey-h) var(--grey-s) calc(var(--grey-l)*0.15));
+  
+  --grey-op05: hsla(var(--grey-h) var(--grey-s) var(--grey-l) / 0.05);
+  --grey-op10: hsla(var(--grey-h) var(--grey-s) var(--grey-l) / 0.1);
+  --grey-op20: hsla(var(--grey-h) var(--grey-s) var(--grey-l) / 0.2);
+  --grey-op30: hsla(var(--grey-h) var(--grey-s) var(--grey-l) / 0.3);
+  --grey-op40: hsla(var(--grey-h) var(--grey-s) var(--grey-l) / 0.4);
+  --grey-op50: hsla(var(--grey-h) var(--grey-s) var(--grey-l) / 0.5);
+  --grey-op60: hsla(var(--grey-h) var(--grey-s) var(--grey-l) / 0.6);
+  --grey-op70: hsla(var(--grey-h) var(--grey-s) var(--grey-l) / 0.7);
+  --grey-op80: hsla(var(--grey-h) var(--grey-s) var(--grey-l) / 0.8);
+  --grey-op90: hsla(var(--grey-h) var(--grey-s) var(--grey-l) / 0.9);
+  
+  --green-50: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*1.925));
+  --green-100: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*1.85));
+  --green-150: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*1.75));
+  --green-200: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*1.65));
+  --green-250: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*1.5));  
+  --green-300: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*1.4));
+  --green-350: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*1.3));  
+  --green-400: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*1.2));
+  --green-450: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*1.15));  
+  --green-500: hsl(var(--green-h) var(--green-s) var(--green-l));
+  --green-550: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*0.9));  
+  --green-600: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*0.8));
+  --green-650: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*0.7));  
+  --green-700: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*0.6));
+  --green-750: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*0.5));  
+  --green-800: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*0.4));
+  --green-850: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*0.3));  
+  --green-900: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*0.2));
+  --green-950: hsl(var(--green-h) var(--green-s) calc(var(--green-l)*0.15));
+  
+  --blue-50: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*1.9));
+  --blue-100: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*1.85));
+  --blue-150: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*1.75));
+  --blue-200: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*1.65));
+  --blue-250: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*1.5));  
+  --blue-300: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*1.4));
+  --blue-350: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*1.3));  
+  --blue-400: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*1.2));
+  --blue-450: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*1.15));  
+  --blue-500: hsl(var(--blue-h) var(--blue-s) var(--blue-l));
+  --blue-550: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*0.9));  
+  --blue-600: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*0.8));
+  --blue-650: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*0.7));  
+  --blue-700: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*0.6));
+  --blue-750: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*0.5));  
+  --blue-800: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*0.4));
+  --blue-850: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*0.3));  
+  --blue-900: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*0.2));
+  --blue-950: hsl(var(--blue-h) var(--blue-s) calc(var(--blue-l)*0.15));
+ 
+  --red-50: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*1.925));
+  --red-100: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*1.85));
+  --red-150: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*1.75));
+  --red-200: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*1.65));
+  --red-250: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*1.5));  
+  --red-300: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*1.4));
+  --red-350: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*1.3));  
+  --red-400: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*1.2));
+  --red-450: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*1.15));  
+  --red-500: hsl(var(--red-h) var(--red-s) var(--red-l));
+  --red-550: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*0.9));  
+  --red-600: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*0.8));
+  --red-650: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*0.7));  
+  --red-700: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*0.6));
+  --red-750: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*0.5));  
+  --red-800: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*0.4));
+  --red-850: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*0.3));  
+  --red-900: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*0.2));
+  --red-950: hsl(var(--red-h) var(--red-s) calc(var(--red-l)*0.15));
+  
+  --yellow-50: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*1.925));
+  --yellow-100: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*1.85));
+  --yellow-150: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*1.75));
+  --yellow-200: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*1.65));
+  --yellow-250: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*1.5));  
+  --yellow-300: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*1.4));
+  --yellow-350: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*1.3));  
+  --yellow-400: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*1.2));
+  --yellow-450: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*1.15)); 
+  --yellow-500: hsl(var(--yellow-h) var(--yellow-s) var(--yellow-l));
+  --yellow-550: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*0.9));  
+  --yellow-600: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*0.8));
+  --yellow-650: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*0.7));  
+  --yellow-700: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*0.6));
+  --yellow-750: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*0.5));  
+  --yellow-800: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*0.4));
+  --yellow-850: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*0.3));  
+  --yellow-900: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*0.2));
+  --yellow-950: hsl(var(--yellow-h) var(--yellow-s) calc(var(--yellow-l)*0.15));
+  
+  --orange-50: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*1.925));
+  --orange-100: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*1.85));
+  --orange-150: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*1.75));
+  --orange-200: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*1.65));
+  --orange-250: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*1.5));  
+  --orange-300: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*1.4));
+  --orange-350: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*1.3));  
+  --orange-400: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*1.2));
+  --orange-450: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*1.15)); 
+  --orange-500: hsl(var(--orange-h) var(--orange-s) var(--orange-l));
+  --orange-550: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*0.9));  
+  --orange-600: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*0.8));
+  --orange-650: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*0.7));  
+  --orange-700: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*0.6));
+  --orange-750: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*0.5));  
+  --orange-800: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*0.4));
+  --orange-850: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*0.3));  
+  --orange-900: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*0.2));
+  --orange-950: hsl(var(--orange-h) var(--orange-s) calc(var(--orange-l)*0.15));
+  
+  --purple-50: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*1.925));
+  --purple-100: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*1.85));
+  --purple-150: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*1.75));
+  --purple-200: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*1.65));
+  --purple-250: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*1.5));  
+  --purple-300: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*1.4));
+  --purple-350: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*1.3));  
+  --purple-400: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*1.2));
+  --purple-450: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*1.15)); 
+  --purple-500: hsl(var(--purple-h) var(--purple-s) var(--purple-l));
+  --purple-550: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*0.9));  
+  --purple-600: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*0.8));
+  --purple-650: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*0.7));  
+  --purple-700: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*0.6));
+  --purple-750: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*0.5));  
+  --purple-800: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*0.4));
+  --purple-850: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*0.3));  
+  --purple-900: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*0.2));
+  --purple-950: hsl(var(--purple-h) var(--purple-s) calc(var(--purple-l)*0.15));
+
+  --green-op05: hsla(var(--green-h) var(--green-s) var(--green-l) / 0.05);
+  --green-op10: hsla(var(--green-h) var(--green-s) var(--green-l) / 0.1);
+  --green-op20: hsla(var(--green-h) var(--green-s) var(--green-l) / 0.2);
+  --green-op30: hsla(var(--green-h) var(--green-s) var(--green-l) / 0.3);
+  --green-op40: hsla(var(--green-h) var(--green-s) var(--green-l) / 0.4);
+  --green-op50: hsla(var(--green-h) var(--green-s) var(--green-l) / 0.5);
+  --green-op60: hsla(var(--green-h) var(--green-s) var(--green-l) / 0.6);
+  --green-op70: hsla(var(--green-h) var(--green-s) var(--green-l) / 0.7);
+  --green-op80: hsla(var(--green-h) var(--green-s) var(--green-l) / 0.8);
+  --green-op90: hsla(var(--green-h) var(--green-s) var(--green-l) / 0.9);
+
+  --blue-op05: hsla(var(--blue-h) var(--blue-s) var(--blue-l) / 0.05);
+  --blue-op10: hsla(var(--blue-h) var(--blue-s) var(--blue-l) / 0.1);
+  --blue-op20: hsla(var(--blue-h) var(--blue-s) var(--blue-l) / 0.2);
+  --blue-op30: hsla(var(--blue-h) var(--blue-s) var(--blue-l) / 0.3);
+  --blue-op40: hsla(var(--blue-h) var(--blue-s) var(--blue-l) / 0.4);
+  --blue-op50: hsla(var(--blue-h) var(--blue-s) var(--blue-l) / 0.5);
+  --blue-op60: hsla(var(--blue-h) var(--blue-s) var(--blue-l) / 0.6);
+  --blue-op70: hsla(var(--blue-h) var(--blue-s) var(--blue-l) / 0.7);
+  --blue-op80: hsla(var(--blue-h) var(--blue-s) var(--blue-l) / 0.8);
+  --blue-op90: hsla(var(--blue-h) var(--blue-s) var(--blue-l) / 0.9);
+
+  --red-op05: hsla(var(--red-h) var(--red-s) var(--red-l) / 0.05);
+  --red-op10: hsla(var(--red-h) var(--red-s) var(--red-l) / 0.1);
+  --red-op20: hsla(var(--red-h) var(--red-s) var(--red-l) / 0.2);
+  --red-op30: hsla(var(--red-h) var(--red-s) var(--red-l) / 0.3);
+  --red-op40: hsla(var(--red-h) var(--red-s) var(--red-l) / 0.4);
+  --red-op50: hsla(var(--red-h) var(--red-s) var(--red-l) / 0.5);
+  --red-op60: hsla(var(--red-h) var(--red-s) var(--red-l) / 0.6);
+  --red-op70: hsla(var(--red-h) var(--red-s) var(--red-l) / 0.7);
+  --red-op80: hsla(var(--red-h) var(--red-s) var(--red-l) / 0.8);
+  --red-op90: hsla(var(--red-h) var(--red-s) var(--red-l) / 0.9);
+
+  --yellow-op05: hsla(var(--yellow-h) var(--yellow-s) var(--yellow-l) / 0.05);
+  --yellow-op10: hsla(var(--yellow-h) var(--yellow-s) var(--yellow-l) / 0.1);
+  --yellow-op20: hsla(var(--yellow-h) var(--yellow-s) var(--yellow-l) / 0.2);
+  --yellow-op30: hsla(var(--yellow-h) var(--yellow-s) var(--yellow-l) / 0.3);
+  --yellow-op40: hsla(var(--yellow-h) var(--yellow-s) var(--yellow-l) / 0.4);
+  --yellow-op50: hsla(var(--yellow-h) var(--yellow-s) var(--yellow-l) / 0.5);
+  --yellow-op60: hsla(var(--yellow-h) var(--yellow-s) var(--yellow-l) / 0.6);
+  --yellow-op70: hsla(var(--yellow-h) var(--yellow-s) var(--yellow-l) / 0.7);
+  --yellow-op80: hsla(var(--yellow-h) var(--yellow-s) var(--yellow-l) / 0.8);
+  --yellow-op90: hsla(var(--yellow-h) var(--yellow-s) var(--yellow-l) / 0.9);
+
+  --orange-op05: hsla(var(--orange-h) var(--orange-s) var(--orange-l) / 0.05);
+  --orange-op10: hsla(var(--orange-h) var(--orange-s) var(--orange-l) / 0.1);
+  --orange-op20: hsla(var(--orange-h) var(--orange-s) var(--orange-l) / 0.2);
+  --orange-op30: hsla(var(--orange-h) var(--orange-s) var(--orange-l) / 0.3);
+  --orange-op40: hsla(var(--orange-h) var(--orange-s) var(--orange-l) / 0.4);
+  --orange-op50: hsla(var(--orange-h) var(--orange-s) var(--orange-l) / 0.5);
+  --orange-op60: hsla(var(--orange-h) var(--orange-s) var(--orange-l) / 0.6);
+  --orange-op70: hsla(var(--orange-h) var(--orange-s) var(--orange-l) / 0.7);
+  --orange-op80: hsla(var(--orange-h) var(--orange-s) var(--orange-l) / 0.8);
+  --orange-op90: hsla(var(--orange-h) var(--orange-s) var(--orange-l) / 0.9);
+
+  --purple-op05: hsla(var(--purple-h) var(--purple-s) var(--purple-l) / 0.05);
+  --purple-op10: hsla(var(--purple-h) var(--purple-s) var(--purple-l) / 0.1);
+  --purple-op20: hsla(var(--purple-h) var(--purple-s) var(--purple-l) / 0.2);
+  --purple-op30: hsla(var(--purple-h) var(--purple-s) var(--purple-l) / 0.3);
+  --purple-op40: hsla(var(--purple-h) var(--purple-s) var(--purple-l) / 0.4);
+  --purple-op50: hsla(var(--purple-h) var(--purple-s) var(--purple-l) / 0.5);
+  --purple-op60: hsla(var(--purple-h) var(--purple-s) var(--purple-l) / 0.6);
+  --purple-op70: hsla(var(--purple-h) var(--purple-s) var(--purple-l) / 0.7);
+  --purple-op80: hsla(var(--purple-h) var(--purple-s) var(--purple-l) / 0.8);
+  --purple-op90: hsla(var(--purple-h) var(--purple-s) var(--purple-l) / 0.9);
+
+  /*-- Shadows ---------------------*/
+
+    --shadow-sm: 0px 2px 4px var(--grey-op10),
+    0px 0px 8px var(--grey-op10);
+  --shadow-md: 0px 2px 3px var(--grey-op10),
+    0px 2px 8px var(--grey-op10),
+    0px 4px 16px var(--grey-op10);
+  --shadow-lg: 0px 2px 4px var(--grey-op10),
+    0px 0px 8px var(--grey-op10),
+    0px 16px 24px var(--grey-op10);
+  --shadow-xl: 0px 2px 4px var(--grey-op10),
+    0px 8px 16px var(--grey-op20),
+    0px 0px 32px var(--grey-op10);
+
+
+  
+/*-- Typography ---------------------*/
+
+  --text-small: calc(var(--type-base)*0.875); 
+  --text-large: calc(var(--type-base)*1.2); 
+  --line-height-1: 1;
+
+  
+   --radius-sm: calc(var(--radius-base) *0.5);
+   --radius-md: var(--radius-base);
+   --radius-lg: calc(var(--radius-base) *2);
+   --radius-rounded: 9999rem;
+   --radius-default: var(--radius-md);
+
+  /*-- Sizing ---------------------------------*/
+  
+  --size-0-5: calc(var(--size-base)*0.5);
+  --size-1: var(--size-base);
+  --size-1-5: calc(var(--size-base)*1.5);
+  --size-2: calc(var(--size-base)*2);
+  --size-2-5: calc(var(--size-base)*2.5);
+  --size-3: calc(var(--size-base)*3);
+  --size-4: calc(var(--size-base)*4);
+  --size-5: calc(var(--size-base)*5);
+  --size-6: calc(var(--size-base)*6);
+  --size-7: calc(var(--size-base)*7);
+  --size-8: calc(var(--size-base)*8);
+  --size-9: calc(var(--size-base)*9);
+  --size-10: calc(var(--size-base)*10);
+  --size-11: calc(var(--size-base)*11);
+  --size-12: calc(var(--size-base)*12);
+  --size-13: calc(var(--size-base)*13);
+  --size-14: calc(var(--size-base)*14);
+  --size-15: calc(var(--size-base)*15);
+  --size-16: calc(var(--size-base)*16);
+  --size-17: calc(var(--size-base)*17);
+  --size-18: calc(var(--size-base)*18);
+  --size-19: calc(var(--size-base)*19);
+  --size-20: calc(var(--size-base)*20);
+  --size-21: calc(var(--size-base)*21);
+  --size-22: calc(var(--size-base)*22);
+  --size-23: calc(var(--size-base)*23);
+  --size-24: calc(var(--size-base)*24);
+  --size-25: calc(var(--size-base)*25);
+  --size-26: calc(var(--size-base)*26);
+  --size-27: calc(var(--size-base)*27);
+  --size-28: calc(var(--size-base)*28);
+  --size-29: calc(var(--size-base)*29);
+  --size-30: calc(var(--size-base)*30);
+
+  /*-- Bridge aliases ---------------------------------
+      The button/input rules below this point reference
+      --btn-base, --btn-radius, --text-base, --bg-primary,
+      --bg-primary-hover, --color-secondary, --color-secondary-hover,
+      --color-tertiary and --color-tertiary-hover, which the design
+      system never defines. These aliases point them at the
+      semantic tokens already declared above so the components
+      render as intended, without adding any new colour or size. --*/
+  --btn-base: var(--size-1);
+  --btn-radius: var(--radius-md);
+  --text-base: var(--type-base);
+  --bg-primary: var(--primary);
+  --bg-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-hover: var(--tertiary-hover);
+
+}
+
+/* End of Root -----------------------------------------------------*/
+/*-- Styles Section  -----------------------------------------------*/
+
+/*-- Radius Classes --------------------------------------*/
+
+.radius-sm { border-radius: var(--radius-sm); }
+.radius-md { border-radius: var(--radius-md); }
+.radius-lg { border-radius: var(--radius-lg); }
+
+/* -- Shadow Classes --------------------------------------*/
+
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+.shadow-xl { box-shadow: var(--shadow-xl); }
+
+
+
+
+/* Typography ------------------------*/
+
+html
+{
+  font-family: var(--family-body);
+  font-size: var(--type-base);
+}
+
+
+body, p, label, ul, li, details, summary
+{
+    line-height: var(--line-height-base);
+    font-size: var(--type-base);
+    font-family: var(--family-body);
+    font-weight: var(--body-weight);
+    margin-block-end: 1.33ch;
+}
+
+label
+{
+  line-height: var(--line-height-1);
+}
+
+p.small
+{
+  font-size: var(--text-small);
+}
+
+p.large
+{
+  font-size: var(--text-large);
+}
+
+h1, h2, h3, h4, h5, h6
+{
+  line-height: calc(var(--line-height-base)*0.8);  
+  margin-block-end: 1.4ch;
+  font-family: var(--family-heading);
+  font-weight: var(--heading-weight);
+  color: var(--heading-color);
+}
+
+h1{font-size: calc(var(--type-base) + var(--type-ratio) *5);}
+h2{font-size: calc(var(--type-base) + var(--type-ratio) *4);}
+h3{font-size: calc(var(--type-base) + var(--type-ratio) *3);}
+h4{font-size: calc(var(--type-base) + var(--type-ratio) *2);}
+h5{font-size: calc(var(--type-base) + var(--type-ratio) *1);}
+h6{font-size: calc(var(--type-base) + var(--type-ratio) *0.85);}
+ 
+/* HTML Elements -------------------------- */
+
+hr
+{
+  margin-block: var(--size-3);
+}
+
+/* Scroll Bars ------------------------ */
+
+::-webkit-scrollbar 
+{
+  width: 12px;
+}
+
+::-webkit-scrollbar-track 
+{
+  background: var(--grey-50);
+}
+
+::-webkit-scrollbar-thumb 
+{
+  background: var(--grey-200);
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover 
+{
+  background: var(--grey-300);
+}
+
+
+
+/* Atomic Or Comon UI Elements  ------------------------------------------*/
+
+/* Buttons ---------------*/
+
+button[class^="btn-"]
+{
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--size-1);
+  min-height: var(--size-6);
+  padding: var(--size-1) calc(var(--btn-base) *3.33);
+  border-radius: var(--btn-radius);
+  border: 1px solid transparent;
+  transition: var(--transition);
+  font-size: var(--text-base);
+  line-height: var(--line-height-1);
+  cursor: pointer;
+}
+
+button[class*="icon-only"]
+{
+  padding-inline: var(--size-1) !important;
+  min-width: var(--size-6);
+}
+
+button[class*="-round"]
+{
+  border-radius: var(--radius-rounded);
+}
+
+button[class*="icon-only"][class*="-sm"]
+{
+  padding-inline: var(--size-1) !important;
+  min-width: var(--size-4);
+}
+
+button[class*="icon-only"][class*="-lg"]
+{
+  padding-inline: var(--size-1) !important;
+  min-width: var(--size-7);
+}
+
+button[class^="btn-"] svg
+{
+  --icon-size: var(--size-2-5);
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+
+button[class*="btn-primary"]
+{
+  color: var(--white);
+  background: var(--bg-primary);
+  text-shadow: var(--btn-text-shadow);
+}
+
+    button[class*="btn-primary"]:hover
+    {
+      background: var(--bg-primary-hover);
+    }
+
+button[class*="btn-secondary"]
+{
+  color: var(--white);
+  background: var(--color-secondary);
+  text-shadow: var(--btn-text-shadow);
+}
+
+    button[class*="btn-secondary"]:hover
+    {
+      background: var(--color-secondary-hover);
+    }
+
+button[class*="btn-tertiary"]
+{
+  color: var(--body-color);
+  background: var(--color-tertiary);
+  border-color: var(--grey-op05);
+  
+  svg, .icon
+  {
+    color: var(--color-secondary);
+    stroke: var(--color-secondary);
+  }
+}
+
+     button[class*="btn-tertiary"]:hover
+    {
+      background: var(--color-tertiary-hover);
+    }
+
+.btn-clear
+{
+  color: var(--body-color);
+  background: transparent;
+  
+  svg, .icon
+  {
+    color: var(--color-secondary);
+    stroke: var(--color-secondary);
+  }
+}
+
+     .btn-clear:hover
+    {
+      background: var(--color-tertiary);
+    }
+
+.btn-text-only
+{
+  color: var(--body-color);
+  background: transparent;
+  padding: 0 !important;
+  
+  svg, .icon
+  {
+    color: var(--color-secondary);
+    stroke: var(--color-secondary);
+  }
+}
+
+     .btn-text-only:hover
+    {
+      color: var(--link-color);
+      text-decoration: underline;
+    }
+
+button[class*="-sm"]
+{
+  gap: var(--size-1);
+  min-height: var(--size-4);
+  padding: var(--size-1) calc(var(--btn-base) *2.33);
+  font-size: var(--text-base);
+  line-height: var(--line-height-1);
+}
+
+    button[class*="-sm"] svg
+    {
+      --icon-size: var(--size-2);
+    }
+
+button[class*="-lg"]
+{
+  --btn-base: calc(var(--size-1) *1.33); 
+  font-size: calc(var(--text-base) *1.33);
+  min-height: var(--size-7);
+}
+
+    button[class*="-lg"] svg
+    {
+      --icon-size: var(--size-3);
+    }
+
+
+/* Input Styles ------------------------*/
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input[type="number"],
+select,
+textarea
+{
+  width: 100%;
+  min-height: var(--size-6);
+  padding: var(--size-1) calc(var(--btn-base) *2.33);
+  border: 1px solid var(--grey-200);
+  border-radius: var(--btn-radius);
+  background: var(--white);
+  color: var(--body-color);
+  font: inherit;
+  line-height: var(--line-height-1);
+  transition: var(--transition);
+  box-sizing: border-box;
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="search"]::placeholder,
+input[type="tel"]::placeholder,
+input[type="url"]::placeholder,
+input[type="number"]::placeholder,
+textarea::placeholder
+{
+  color: var(--grey-500);
+}
+
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="password"]:hover,
+input[type="search"]:hover,
+input[type="tel"]:hover,
+input[type="url"]:hover,
+input[type="number"]:hover,
+select:hover,
+textarea:hover
+{
+  border-color: var(--grey-300);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus
+{
+  outline: 2px solid var(--blue-500);
+  outline-offset: 2px;
+  border-color: var(--blue-500);
+}
+
+select
+{
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--grey-600) 50%),
+    linear-gradient(135deg, var(--grey-600) 50%, transparent 50%);
+  background-position: calc(100% - var(--size-2)) calc(50% - 2px), calc(100% - var(--size-1-5)) calc(50% - 2px);
+  background-size: var(--size-1) var(--size-1);
+  background-repeat: no-repeat;
+  padding-right: calc(var(--btn-base) *4);
+}
+
+textarea
+{
+  min-height: calc(var(--size-6) * 2);
+  resize: vertical;
+}
+
+input[type="text"]:disabled,
+input[type="email"]:disabled,
+input[type="password"]:disabled,
+input[type="search"]:disabled,
+input[type="tel"]:disabled,
+input[type="url"]:disabled,
+input[type="number"]:disabled,
+select:disabled,
+textarea:disabled
+{
+  background: var(--grey-50);
+  border-color: var(--grey-200);
+  color: var(--grey-500);
+  cursor: not-allowed;
+}
+
